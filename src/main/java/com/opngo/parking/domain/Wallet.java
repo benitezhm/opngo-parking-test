@@ -28,6 +28,6 @@ public class Wallet {
 	private BigDecimal currenBalance;
 	
 	@OneToOne(fetch = FetchType.EAGER)
-	private Customer customer;
+	private User user;
 
 }

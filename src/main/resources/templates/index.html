@@ -1,58 +1,63 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html layout:decorator="layout">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Parking Registration</title>
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
-          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
-
-    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+<title>Customer List</title>
 </head>
 <body>
+	<!-- /* Content of this page will be decorated by the elements of layout.html (task/layout) */ -->
+	<div layout:fragment="content" class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				Simple Tables <small>preview of simple tables</small>
+			</h1>
+			<ol class="breadcrumb">
+				<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+				<li><a href="#">Tables</a></li>
+				<li class="active">Simple</li>
+			</ol>
+		</section>
 
-<div class="container-fluid" style="margin-top: 20px">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="panel panel-primary">
+		<!-- Main content -->
+		<section class="content">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="box">
+						<div class="box-header with-border">
+							<h3 class="box-title">Bordered Table</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th style="width: 10px">#</th>
+										<th>Task</th>
+										<th>Progress</th>
+										<th style="width: 40px">Label</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="user : ${users}">
+										<td th:text="${user.getId()}">1.</td>
+										<td th:text="${user.getUsername()}">Update software</td>
+										<td>
+											<div class="progress progress-xs">
+												<div class="progress-bar progress-bar-danger"
+													style="width: 55%"></div>
+											</div>
+										</td>
+										<td><span class="badge bg-red">55%</span></td>
+									</tr>
 
-                <div class="panel-heading">
-                    <h1 class="panel-title">Customers</h1>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive" th:if="${not #lists.isEmpty(customers)}">
-                        <table class="table table-hover ">
-                            <thead class="thead-inverse">
-                            <tr>
-                                <th>ID</th>
-                                <th>Email</th>
-                                <th>View</th>
-                            </tr>
-                            </thead>
-                            <tr th:remove="all">
-                                <td>123</td>
-                                <td>customer@example.com</td>
-                                <td><a href="#">View</a></td>
-                            </tr>
-                            <tr th:each="customer : ${customers}">
-                            	<td th:text="${customer.id}">123</td>
-                            	<td th:text="${customer.email}">Customer email</td>
-                            	<td><a href="#">View</a></td>    
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /.content -->
+	</div>
 </body>
 </html>

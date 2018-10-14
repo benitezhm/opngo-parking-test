@@ -30,7 +30,7 @@ public class Vehicle {
 	private String plate;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Customer customer;
+	private User user;
 	
 	@OneToMany
 	private List<ParkingSession> session;

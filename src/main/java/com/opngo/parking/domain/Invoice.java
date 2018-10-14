@@ -30,7 +30,7 @@ public class Invoice {
 	private Boolean isSent;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Customer customer;
+	private User user;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private ParkingSession session;
