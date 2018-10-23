@@ -5,6 +5,7 @@ package com.opngo.parking.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User.UserBuilder;
@@ -22,7 +23,7 @@ import com.opngo.parking.repositories.UserRepository;
  *
  */
 @Service
-public class UserServiceImpl implements UserDetailsService,  UserService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -50,15 +51,20 @@ public class UserServiceImpl implements UserDetailsService,  UserService {
 	}
 
 	@Override
+	public User save(User user) {
+		user.setRoles(new String[] {"USER"});
+		return userRepository.save(user);
+	}
+
+	@Override
 	public User findById(Long l) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> user = userRepository.findById(l);
+		return user.isPresent() ? user.get() : null;
 	}
 
 	@Override
 	public User findByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.findByUsername(username);
 	}
 
 }

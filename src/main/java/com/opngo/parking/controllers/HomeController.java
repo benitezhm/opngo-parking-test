@@ -5,11 +5,16 @@ package com.opngo.parking.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import com.opngo.parking.domain.User;
@@ -49,11 +54,32 @@ public class HomeController {
 		return "login";
 	}
 
-	@RequestMapping(value = "/registration", method = RequestMethod.GET)
+	@GetMapping("/registration")
 	public String register(WebRequest request, Model model) {
-		User customer = new User();
-		model.addAttribute("customer", customer);
+		User user = new User();
+		model.addAttribute("user", user);
 		return "register";
 
 	}
+	
+	@PostMapping("/registration")
+	public String register(@ModelAttribute("user") @Valid User user, BindingResult result) {
+		User existing = userService.findByUsername(user.getUsername());
+        if (existing != null){
+            result.rejectValue("username", null, "There is already an account registered with that email");
+        }
+        
+        if (!user.getPassword().equals(user.getMatchingPassword())) {
+        	result.rejectValue("password", null, "The passwords does not match");
+        }
+
+        if (result.hasErrors()){
+            return "register";
+        }
+
+        userService.save(user);
+        
+        return "redirect:/login";
+	}
+	
 }
