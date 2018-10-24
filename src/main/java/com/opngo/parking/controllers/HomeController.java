@@ -22,7 +22,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.opngo.parking.domain.User;
 import com.opngo.parking.domain.Vehicle;
-import com.opngo.parking.repositories.UserRepository;
 import com.opngo.parking.services.UserService;
 import com.opngo.parking.services.VehicleService;
 

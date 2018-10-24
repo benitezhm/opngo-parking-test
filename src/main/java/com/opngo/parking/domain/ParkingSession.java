@@ -35,6 +35,8 @@ public class ParkingSession {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date end;
 	
+	private int asset;
+	
 	@ManyToOne
 	private Vehicle vehicle;
 

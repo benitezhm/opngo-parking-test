@@ -34,11 +34,11 @@ public class ParkingApplication {
 			user.setRoles(new String[] { "USER" });
 			userRepository.save(user);
 			
-			Stream.of("Ford Fiesta", "Fiat Palio", "Chrysler Neon" ).forEach(name -> {
+			Stream.of("AEB-123", "AEB-456", "AEB-789" ).forEach(plate -> {
 				Vehicle vehicle = new Vehicle();
 				vehicle.setUser(user);
-				vehicle.setName(name);
-				vehicle.setPlate("13B-12A");
+				vehicle.setName("Sedan ");
+				vehicle.setPlate(plate);
 				vehicleRespository.save(vehicle);
 			});
 		};
