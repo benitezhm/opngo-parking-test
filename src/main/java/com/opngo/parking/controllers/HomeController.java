@@ -8,6 +8,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,26 +21,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 
 import com.opngo.parking.domain.User;
+import com.opngo.parking.domain.Vehicle;
+import com.opngo.parking.repositories.UserRepository;
 import com.opngo.parking.services.UserService;
-
-import lombok.extern.slf4j.Slf4j;
+import com.opngo.parking.services.VehicleService;
 
 /**
  * @author miguel
  *
  */
-@Slf4j
 @Controller
 public class HomeController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private VehicleService vehicleService;
 
 	@RequestMapping({"", "/index"})
 	public String getHomePage(Model model) {
-		log.debug("Getting Index Page");
-		List<User> users = userService.getUsers();
-		model.addAttribute("users", users);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		List<Vehicle> vehicles = vehicleService.getVehiclesByUser(userDetails.getUsername());
+		model.addAttribute("vehicles", vehicles);
 
 		return "index";
 	}
@@ -55,7 +62,7 @@ public class HomeController {
 	}
 
 	@GetMapping("/registration")
-	public String register(WebRequest request, Model model) {
+	public String register(Model model) {
 		User user = new User();
 		model.addAttribute("user", user);
 		return "register";
@@ -80,6 +87,32 @@ public class HomeController {
         userService.save(user);
         
         return "redirect:/login";
+	}
+	
+	@GetMapping("/newVehicle")
+	public String newVehicle(WebRequest request, Model model) {
+		Vehicle vehicle = new Vehicle();
+		model.addAttribute("vehicle", vehicle);
+		return "newVehicle";
+	}
+	
+	@PostMapping("/newVehicle")
+	public String newVehicle(@ModelAttribute("vehicle") @Valid Vehicle vehicle, BindingResult result) {
+		Vehicle existing = vehicleService.findByPlate(vehicle.getPlate());
+		if (existing != null) {
+			result.rejectValue("plate", null, "There is already a vehicle with that plate");
+		}
+		
+		if (result.hasErrors()) {
+			return "newVehicle";
+		}
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails user = (UserDetails) authentication.getPrincipal();
+		vehicle.setUser(userService.findByUsername(user.getUsername()));
+		vehicleService.save(vehicle);
+		
+		return "redirect:/index";
 	}
 	
 }

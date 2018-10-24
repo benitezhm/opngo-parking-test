@@ -5,6 +5,8 @@ package com.opngo.parking.services;
 
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.opngo.parking.domain.User;
 
 /**

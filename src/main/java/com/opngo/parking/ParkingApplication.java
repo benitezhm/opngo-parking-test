@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.opngo.parking.domain.User;
+import com.opngo.parking.domain.Vehicle;
 import com.opngo.parking.repositories.UserRepository;
+import com.opngo.parking.repositories.VehicleRepository;
 
 @SpringBootApplication
 public class ParkingApplication {
@@ -16,25 +18,31 @@ public class ParkingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ParkingApplication.class, args);
 	}
-	
+
 	/**
 	 * Some database initialization
-	 * @param repository
+	 * 
+	 * @param userRepository
 	 * @return
 	 */
 	@Bean
-	ApplicationRunner init(UserRepository repository) {
+	ApplicationRunner init(UserRepository userRepository, VehicleRepository vehicleRespository) {
 		return args -> {
-			Stream.of("customer_1@example.com", "customer_2@example.com", "customer_3@example.com", 
-					"customer_4@example.com", "customer_5@example.com",
-					"customer_6@example.com", "customer_7@example.com", "customer_8@example.com", "customer_9@example.com").forEach(email -> {
-						User user = new User();
-						user.setUsername(email);
-						user.setPassword("123");
-						user.setRoles(new String[] {"USER"});
-						repository.save(user);
-					});
+			User user = new User();
+			user.setUsername("customer@info.com");
+			user.setPassword("123");
+			user.setRoles(new String[] { "USER" });
+			userRepository.save(user);
+			
+			Stream.of("Ford Fiesta", "Fiat Palio", "Chrysler Neon" ).forEach(name -> {
+				Vehicle vehicle = new Vehicle();
+				vehicle.setUser(user);
+				vehicle.setName(name);
+				vehicle.setPlate("13B-12A");
+				vehicleRespository.save(vehicle);
+			});
 		};
+
 	}
-	
+
 }

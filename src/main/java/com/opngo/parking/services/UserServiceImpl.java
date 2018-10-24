@@ -27,6 +27,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	private User user;
+	
+	public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

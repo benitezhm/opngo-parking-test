@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html layout:decorator="layout">
+<head>
+<title>New Vehicle</title>
+</head>
+<body>
+	<!-- /* Content of this page will be decorated by the elements of layout.html (task/layout) */ -->
+	<div layout:fragment="content" class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="box box-primary">
+			<div class="box-header with-border">
+				<h3 class="box-title">New Vehicle</h3>
+			</div>
+			<!-- /.box-header -->
+			<!-- form start -->
+			<form action="/newVehicle" method="post" th:object="${vehicle}"
+				enctype="utf8">
+				<div class="box-body">
+					<div class="form-group">
+						<label for="name">Name</label> <input type="text"
+							class="form-control" id="name" placeholder="Name" th:field="*{name}">
+						<p th:each="error : ${#fields.errors('name')}"
+							th:text="${error}">Validation error</p>
+					</div>
+					<div class="form-group">
+						<label for="plate">Password</label> <input
+							type="text" class="form-control" id="plate" placeholder="Plate"
+							th:field="*{plate}">
+						<p th:each="error : ${#fields.errors('plate')}"
+							th:text="${error}">Validation error</p>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
